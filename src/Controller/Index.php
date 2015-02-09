@@ -1,7 +1,7 @@
 <?php
-Namespace MOOP\Controller;
+namespace MOOP\Controller;
 
-Use PDO;
+use PDO;
  
 class Index {
     

@@ -1,5 +1,5 @@
 <?php
-Namespace MOOP;
+namespace MOOP;
 
 class MasterController {
     

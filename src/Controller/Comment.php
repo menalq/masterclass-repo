@@ -1,15 +1,14 @@
 <?php
-Namespace MOOP\Controller;
+namespace MOOP\Controller;
 
-Use PDO;
+use MOOP\Model\Comment as CommentModel;
 
 class Comment {
+	
+	private $commentModel;
     
     public function __construct($config) {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->commentModel = new CommentModel($config['database']);
     }
     
     public function create() {
@@ -19,13 +18,7 @@ class Comment {
             exit;
         }
         
-        $sql = 'INSERT INTO comment (created_by, created_on, story_id, comment) VALUES (?, NOW(), ?, ?)';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(array(
-            $_SESSION['username'],
-            $_POST['story_id'],
-            filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-        ));
+        $this->commentModel->addComment();
         header("Location: /story/?id=" . $_POST['story_id']);
     }
     
