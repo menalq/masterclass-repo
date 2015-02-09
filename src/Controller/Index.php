@@ -1,4 +1,7 @@
 <?php
+Namespace MOOP\Controller;
+
+Use PDO;
  
 class Index {
     
