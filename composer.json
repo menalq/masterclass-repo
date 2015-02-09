@@ -1,0 +1,19 @@
+{
+    "name": "ciprianmatis/masterclass-repo",
+    "description": "Masterclass",
+    "require-dev": {
+        "phpunit/phpunit": "~4.7@dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "menalq",
+            "email": "menalq@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+	"autoload": {
+		"classmap": ["src/"]
+	}
+}
