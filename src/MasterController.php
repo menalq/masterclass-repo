@@ -1,4 +1,5 @@
 <?php
+Namespace MOOP;
 
 class MasterController {
     
@@ -37,7 +38,7 @@ class MasterController {
                 $controller_details = $v;
                 $path_string = array_shift($matches);
                 $arguments = $matches;
-                $controller_method = explode('/', $controller_details);
+                $controller_method = explode(':', $controller_details);
                 $return = array('call' => $controller_method);
             }
         }

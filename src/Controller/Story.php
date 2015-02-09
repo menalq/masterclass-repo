@@ -1,4 +1,7 @@
 <?php
+Namespace MOOP\Controller;
+
+Use PDO;
 
 class Story {
     
@@ -55,7 +58,7 @@ class Story {
             ';
         }
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
         
     }
     
@@ -95,7 +98,7 @@ class Story {
             </form>
         ';
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
     }
     
 }
