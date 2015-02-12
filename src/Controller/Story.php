@@ -7,8 +7,8 @@ class Story {
 	
 	private $model;
     
-    public function __construct($config) {
-		$this->model = new StoryModel($config['database']);
+    public function __construct(StoryModel $model) {
+		$this->model = $model;
     }
     
     public function index() {

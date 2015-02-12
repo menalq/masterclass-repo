@@ -7,8 +7,8 @@ class Comment {
 	
 	private $model;
     
-    public function __construct($config) {
-		$this->model = new CommentModel($config['database']);
+    public function __construct(CommentModel $model) {
+		$this->model = $model;
     }
     
     public function create() {
