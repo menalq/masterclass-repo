@@ -2,24 +2,24 @@
 
 $di = new \Aura\Di\Container(new \Aura\Di\Factory());
 
-$di->params['Moop\MasterController'] = array(
+$di->params['MOOP\MasterController'] = array(
 	'container'	=> $di,
 	'config'	=> $config
 );
 
-$di->params['Moop\Controller\Comment'] = array(
+$di->params['MOOP\Controller\Comment'] = array(
 	'model' => $di->lazyNew('MOOP\Model\Comment')
 );
 
-$di->params['Moop\Controller\Index'] = array(
+$di->params['MOOP\Controller\Index'] = array(
 	'model' => $di->lazyNew('MOOP\Model\Story')
 );
 
-$di->params['Moop\Controller\Story'] = array(
+$di->params['MOOP\Controller\Story'] = array(
 	'model' => $di->lazyNew('MOOP\Model\Story')
 );
 
-$di->params['Moop\Controller\User'] = array(
+$di->params['MOOP\Controller\User'] = array(
 	'model' => $di->lazyNew('MOOP\Model\User')
 );
 

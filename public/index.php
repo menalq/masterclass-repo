@@ -8,6 +8,5 @@ $config = require_once('../config.php');
 
 require_once '../services.php';
 
-$framework = new \MOOP\MasterController($di, $config);
-
+$framework = $di->newInstance('MOOP\MasterController');
 echo $framework->execute();
