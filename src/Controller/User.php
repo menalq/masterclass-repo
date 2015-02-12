@@ -1,17 +1,14 @@
 <?php
-Namespace MOOP\Controller;
+namespace MOOP\Controller;
 
-Use PDO;
+use MOOP\Model\User as UserModel;
 
 class User {
     
-    public $db;
+    private $model;
     
     public function __construct($config) {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->model = new UserModel($config['database']);
     }
     
     public function create() {
@@ -37,24 +34,18 @@ class User {
             }
             
             if(is_null($error)) {
-                $check_sql = 'SELECT * FROM user WHERE username = ?';
-                $check_stmt = $this->db->prepare($check_sql);
-                $check_stmt->execute(array($_POST['username']));
-                if($check_stmt->rowCount() > 0) {
+				$user = $this->model->getUserByUsername($_POST['username']);
+                if($user) {
                     $error = 'Your chosen username already exists. Please choose another.';
                 }
             }
             
             if(is_null($error)) {
-                $params = array(
-                    $_POST['username'],
-                    $_POST['email'],
-                    md5($_POST['username'] . $_POST['password']),
-                );
-            
-                $sql = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute($params);
+				$this->model->addUser(array(
+					$_POST['username'],
+					$_POST['email'],
+					md5($_POST['username'] . $_POST['password']),
+				));
                 header("Location: /user/login");
                 exit;
             }
@@ -87,11 +78,8 @@ class User {
             if(!isset($_POST['password']) || !isset($_POST['password_check']) ||
                $_POST['password'] != $_POST['password_check']) {
                 $error = 'The password fields were blank or they did not match. Please try again.';       
-            }
-            else {
-                $sql = 'UPDATE user SET password = ? WHERE username = ?';
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute(array(
+            } else {
+				$this->model->changePassword(array(
                    md5($_SESSION['username'] . $_POST['password']), // THIS IS NOT SECURE. 
                    $_SESSION['username'],
                 ));
@@ -99,10 +87,7 @@ class User {
             }
         }
         
-        $dsql = 'SELECT * FROM user WHERE username = ?';
-        $stmt = $this->db->prepare($dsql);
-        $stmt->execute(array($_SESSION['username']));
-        $details = $stmt->fetch(PDO::FETCH_ASSOC);
+		$details = $this->model->getUserByUsername($_SESSION['username']);
         
         $content = '
         ' . $error . '<br />
@@ -127,18 +112,14 @@ class User {
             $username = $_POST['user'];
             $password = $_POST['pass'];
             $password = md5($username . $password); // THIS IS NOT SECURE. DO NOT USE IN PRODUCTION.
-            $sql = 'SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1';
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute(array($username, $password));
-            if($stmt->rowCount() > 0) {
-               $data = $stmt->fetch(PDO::FETCH_ASSOC); 
+			$data = $this->model->getUserByUsernameAndPassword($username, $password);
+            if(count($data)) {
                session_regenerate_id();
                $_SESSION['username'] = $data['username'];
                $_SESSION['AUTHENTICATED'] = true;
                header("Location: /");
                exit;
-            }
-            else {
+            } else {
                 $error = 'Your username/password did not match.';
             }
         }
