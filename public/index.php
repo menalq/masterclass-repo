@@ -6,5 +6,7 @@ require_once '../vendor/autoload.php';
 
 $config = require_once('../config.php');
 
-$framework = new \MOOP\MasterController($config);
+require_once '../services.php';
+
+$framework = $di->newInstance('MOOP\MasterController');
 echo $framework->execute();

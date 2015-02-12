@@ -7,8 +7,8 @@ class User {
     
     private $model;
     
-    public function __construct($config) {
-		$this->model = new UserModel($config['database']);
+    public function __construct(UserModel $model) {
+		$this->model = $model;
     }
     
     public function create() {

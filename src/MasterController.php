@@ -1,11 +1,16 @@
 <?php
+
 namespace MOOP;
+
+use Aura\Di\Container;
 
 class MasterController {
     
     private $config;
+	private $container;
     
-    public function __construct($config) {
+    public function __construct(Container $container, $config) {
+		$this->container = $container;
         $this->_setupConfig($config);
     }
     
@@ -14,7 +19,7 @@ class MasterController {
         $call_class = $call['call'];
         $class = ucfirst(array_shift($call_class));
         $method = array_shift($call_class);
-        $o = new $class($this->config);
+		$o = $this->container->newInstance($class);
         return $o->$method();
     }
     

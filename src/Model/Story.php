@@ -7,10 +7,9 @@ class Story {
 	
 	private $db;
 
-	public function __construct($dbconfig) {
-		$dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	public function __construct(PDO $pdo) {
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->db = $pdo;
     }
 	
 	public function getStories() {
