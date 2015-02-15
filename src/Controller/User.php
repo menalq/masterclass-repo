@@ -53,7 +53,7 @@ class User {
         // Show the create form
         
         $content = '
-            <form method="post">
+            <form method="post" action="/user/create/save">
                 ' . $error . '<br />
                 <label>Username</label> <input type="text" name="username" value="" /><br />
                 <label>Email</label> <input type="text" name="email" value="" /><br />
@@ -75,7 +75,7 @@ class User {
         }
         
         if(isset($_POST['updatepw'])) {
-            if(!isset($_POST['password']) || !isset($_POST['password_check']) ||
+            if(empty($_POST['password']) || empty($_POST['password_check']) ||
                $_POST['password'] != $_POST['password_check']) {
                 $error = 'The password fields were blank or they did not match. Please try again.';       
             } else {
@@ -89,14 +89,13 @@ class User {
         
 		$details = $this->model->getUserByUsername($_SESSION['username']);
         
-        $content = '
-        ' . $error . '<br />
+        $content = '<p style="color:red">
+        ' . $error . '</p>
         
         <label>Username:</label> ' . $details['username'] . '<br />
         <label>Email:</label>' . $details['email'] . ' <br />
         
-         <form method="post">
-                ' . $error . '<br />
+         <form method="post" action="/user/account/save">
             <label>Password</label> <input type="password" name="password" value="" /><br />
             <label>Password Again</label> <input type="password" name="password_check" value="" /><br />
             <input type="submit" name="updatepw" value="Create User" />
@@ -113,7 +112,7 @@ class User {
             $password = $_POST['pass'];
             $password = md5($username . $password); // THIS IS NOT SECURE. DO NOT USE IN PRODUCTION.
 			$data = $this->model->getUserByUsernameAndPassword($username, $password);
-            if(count($data)) {
+            if(!empty($data)) {
                session_regenerate_id();
                $_SESSION['username'] = $data['username'];
                $_SESSION['AUTHENTICATED'] = true;
@@ -125,7 +124,7 @@ class User {
         }
         
         $content = '
-            <form method="post">
+            <form method="post" action="/user/login/check">
                 ' . $error . '<br />
                 <label>Username</label> <input type="text" name="user" value="" />
                 <label>Password</label> <input type="password" name="pass" value="" />

@@ -4,8 +4,18 @@ $di = new \Aura\Di\Container(new \Aura\Di\Factory());
 
 $di->params['MOOP\MasterController'] = array(
 	'container'	=> $di,
-	'config'	=> $config
+	'config'	=> $config,
+	'router'	=> $di->lazyNew('MOOP\Router\Router')
 );
+
+$di->params['MOOP\Router\Router'] = array(
+	'serverVars'	=> $_SERVER,
+	'config'    	=> $di->lazyNew('MOOP\Router\RouterConfig')
+);
+
+$di->params['MOOP\Router\RouterConfig'] = [
+    'config' => $config['routes']
+];
 
 $di->params['MOOP\Controller\Comment'] = array(
 	'model' => $di->lazyNew('MOOP\Model\Comment')
@@ -24,19 +34,19 @@ $di->params['MOOP\Controller\User'] = array(
 );
 
 $di->params['MOOP\Model\Comment'] = array(
-	'pdo' => $di->lazyNew('PDO')
+	'db' => $di->lazyNew('MOOP\Dbal\MysqlDb')
 );
 
 $di->params['MOOP\Model\Story'] = array(
-	'pdo' => $di->lazyNew('PDO')
+	'db' => $di->lazyNew('MOOP\Dbal\MysqlDb')
 );
 
 $di->params['MOOP\Model\User'] = array(
-	'pdo' => $di->lazyNew('PDO')
+	'db' => $di->lazyNew('MOOP\Dbal\MysqlDb')
 );
 
-$di->params['PDO'] = array(
-	'dsn'		=> 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['name'],
-	'username'	=> $config['database']['user'],
-	'passwd'	=> $config['database']['pass']
+$di->params['MOOP\Dbal\MysqlDb'] = array(
+	'dsn'	=> 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['name'],
+	'user'	=> $config['database']['user'],
+	'pass'	=> $config['database']['pass']
 );

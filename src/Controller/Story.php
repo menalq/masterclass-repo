@@ -66,18 +66,14 @@ class Story {
                !filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL)) {
                 $error = 'You did not fill in all the fields or the URL did not validate.';       
             } else {
-                $id = $this->model->addStory(array(
-					$_POST['headline'],
-					$_POST['url'],
-					$_SESSION['username'],
-				));
+                $id = $this->model->addStory($_POST['headline'], $_POST['url'], $_SESSION['username']);
                 header("Location: /story/?id=$id");
                 exit;
             }
         }
         
         $content = '
-            <form method="post">
+            <form method="post" action="/story/save">
                 ' . $error . '<br />
         
                 <label>Headline:</label> <input type="text" name="headline" value="" /> <br />

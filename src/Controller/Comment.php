@@ -18,11 +18,11 @@ class Comment {
             exit;
         }
         
-        $this->model->addComment(array(
+        $this->model->addComment(
             $_SESSION['username'],
             $_POST['story_id'],
-            filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-        ));
+            filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+        );
         header("Location: /story/?id=" . $_POST['story_id']);
     }
     
